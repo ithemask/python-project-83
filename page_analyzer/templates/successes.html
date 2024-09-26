@@ -1,0 +1,5 @@
+{% with successes = get_flashed_messages() %}
+{% if successes %}
+<div class="alert alert-success mb-0 rounded-0 text-center" role="alert">{{ successes[0] }}</div>
+{% endif %}
+{% endwith %}
