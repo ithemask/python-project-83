@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block messages %}
+{% include 'successes.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container-lg mt-3">
+  <h1>Сайт: {{ object.name }}</h1>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-nowrap table-dark" data-test="url">
+      <tbody>
+        <tr>
+          <th>ID</th>
+          <td>{{ object.id }}</td>
+        </tr>
+        <tr>
+          <th>Имя</th>
+          <td>{{ object.name }}</td>
+        </tr>
+        <tr>
+          <th>Дата создания</th>
+          <td>{{ object.created_at }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
