@@ -1,4 +1,3 @@
-import psycopg2
 from os import getenv
 from dotenv import load_dotenv
 from page_analyzer.normalizer import normalize
@@ -18,8 +17,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = getenv('SECRET_KEY')
 DATABASE_URL = getenv('DATABASE_URL')
-conn = psycopg2.connect(DATABASE_URL)
-url_data = UrlData(conn)
+url_data = UrlData(DATABASE_URL)
 
 
 @app.get('/')
