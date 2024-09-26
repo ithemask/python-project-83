@@ -19,9 +19,9 @@
       </ul>
     </nav>
   </header>
+  {% block messages %}{% endblock %}
   <main class="flex-grow-1 bg-secondary bg-gradient">
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
   </main>
   <footer class="border-top py-2 flex-shrink-0 bg-dark">
     <div class="container-lg">
