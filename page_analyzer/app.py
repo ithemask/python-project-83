@@ -27,8 +27,8 @@ def index():
 
 @app.get('/urls')
 def get_urls():
-    objects = url_data.get_content()
-    return render_template('urls/index.html', objects=objects)
+    urls = url_data.get_content()
+    return render_template('urls/index.html', urls=urls)
 
 
 @app.post('/urls')
@@ -44,7 +44,7 @@ def post_url():
 
 @app.get('/urls/<id>')
 def show_url(id):
-    object = url_data.find(id)
-    if object:
-        return render_template('urls/show.html', object=object)
+    url = url_data.find(id)
+    if url:
+        return render_template('urls/show.html', url=url)
     return render_template('not_found.html'), 404

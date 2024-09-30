@@ -13,12 +13,12 @@
           <th>Код ответа</th>
         </tr>
       </thead>
-      {% if objects %}
+      {% if urls %}
       <tbody>
-        {% for object in objects %}
+        {% for url in urls %}
         <tr>
-          <td>{{ object.id }}</td>
-          <td><a href="{{ url_for('show_url', id=object.id) }}">{{ object.name }}</a></td>
+          <td>{{ url.id }}</td>
+          <td><a href="{{ url_for('show_url', id=url.id) }}">{{ url.name }}</a></td>
           <td></td>
           <td></td>
         </tr>

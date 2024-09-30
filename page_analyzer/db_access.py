@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2.extras import NamedTupleCursor
-from page_analyzer.models import UrlObject
+from datetime import datetime
 
 
 class UrlData:
@@ -25,19 +25,15 @@ class UrlData:
     def get_content(self):
         sql = 'SELECT * FROM urls ORDER BY created_at DESC;'
         conn = self.__get_db_conn()
-        objects = []
+        urls = []
         with conn:
             with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
                 cur.execute(sql)
                 entries = cur.fetchall()
         conn.close()
         for entry in entries:
-            objects.append(UrlObject(
-                id=entry.id,
-                name=entry.name,
-                created_at=entry.created_at.date(),
-            ))
-        return objects
+            urls.append(entry)
+        return urls
 
     def find(self, id):
         sql = 'SELECT * FROM urls WHERE id = %s;'
@@ -47,19 +43,12 @@ class UrlData:
                 cur.execute(sql, (id,))
                 entry = cur.fetchone()
         conn.close()
-        if entry:
-            return UrlObject(
-                id=entry.id,
-                name=entry.name,
-                created_at=entry.created_at.date(),
-            )
-        return None
+        return entry
 
     def save(self, name):
         id = self.__get_id(name)
         if id:
             return id
-        new_object = UrlObject(name)
         sql = '''
             INSERT INTO urls (name, created_at)
             VALUES (%s, %s)
@@ -68,7 +57,7 @@ class UrlData:
         conn = self.__get_db_conn()
         with conn:
             with conn.cursor() as cur:
-                cur.execute(sql, (new_object.name, new_object.created_at))
+                cur.execute(sql, (name, datetime.now()))
                 id = cur.fetchone()[0]
         conn.close()
         return id
