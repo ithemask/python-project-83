@@ -27,15 +27,15 @@ def index():
 
 @app.get('/urls')
 def get_urls():
-    urls = url_data.get_content()
-    return render_template('urls/index.html', urls=urls)
+    records = url_data.get_main_info()
+    return render_template('urls/index.html', records=records)
 
 
 @app.post('/urls')
 def post_url():
     name = request.form.get('url')
     if is_valid(name):
-        id = url_data.save(normalize(name))
+        id = url_data.save_url(normalize(name))
         flash('Страница успешно добавлена')
         return redirect(url_for('show_url', id=id), 302)
     flash('Некорректный URL')
@@ -44,7 +44,7 @@ def post_url():
 
 @app.get('/urls/<id>')
 def show_url(id):
-    url = url_data.find(id)
+    url = url_data.find_url(id)
     if url:
         return render_template('urls/show.html', url=url)
     return render_template('not_found.html'), 404

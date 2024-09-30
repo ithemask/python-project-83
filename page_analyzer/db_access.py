@@ -10,7 +10,7 @@ class UrlData:
     def __get_db_conn(self):
         return psycopg2.connect(self.db_url)
 
-    def __get_id(self, name):
+    def __get_url_id(self, name):
         sql = 'SELECT id FROM urls WHERE name = %s;'
         conn = self.__get_db_conn()
         with conn:
@@ -22,7 +22,7 @@ class UrlData:
             return entry[0]
         return None
 
-    def get_content(self):
+    def get_main_info(self):
         sql = 'SELECT * FROM urls ORDER BY created_at DESC;'
         conn = self.__get_db_conn()
         urls = []
@@ -35,7 +35,7 @@ class UrlData:
             urls.append(entry)
         return urls
 
-    def find(self, id):
+    def find_url(self, id):
         sql = 'SELECT * FROM urls WHERE id = %s;'
         conn = self.__get_db_conn()
         with conn:
@@ -45,8 +45,8 @@ class UrlData:
         conn.close()
         return entry
 
-    def save(self, name):
-        id = self.__get_id(name)
+    def save_url(self, name):
+        id = self.__get_url_id(name)
         if id:
             return id
         sql = '''
