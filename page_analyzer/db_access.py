@@ -23,17 +23,25 @@ class UrlData:
         return None
 
     def get_main_info(self):
-        sql = 'SELECT * FROM urls ORDER BY created_at DESC;'
+        sql = '''
+            SELECT DISTINCT ON (u.created_at)
+                u.id,
+                u.name,
+                c.created_at::date,
+                c.status_code
+            FROM urls u
+            LEFT JOIN url_checks c ON u.id = c.url_id
+            ORDER BY
+                u.created_at DESC,
+                c.created_at DESC;
+        '''
         conn = self.__get_db_conn()
-        urls = []
         with conn:
             with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
                 cur.execute(sql)
                 entries = cur.fetchall()
         conn.close()
-        for entry in entries:
-            urls.append(entry)
-        return urls
+        return entries
 
     def find_url(self, id):
         sql = 'SELECT * FROM urls WHERE id = %s;'
