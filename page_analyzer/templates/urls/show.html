@@ -31,7 +31,7 @@
   <form action="{{ url_for('check_url', id=url.id, name=url.name) }}" method="post">
     <input type="submit" class="btn btn-primary" value="Запустить проверку">
   </form>
-  <div>
+  <div class="table-responsive">
     <table class="table table-bordered table-hover table-dark table-striped mt-2" data-test="checks">
       <thead>
         <tr>
