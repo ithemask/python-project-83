@@ -35,10 +35,15 @@ def get_urls():
 def post_url():
     name = request.form.get('url')
     if is_valid(name):
-        id = url_data.save_url(normalize(name))
-        flash('Страница успешно добавлена')
+        name = normalize(name)
+        id = url_data.get_url_id(name)
+        if id:
+            flash('Страница уже существует', 'info')
+        else:
+            id = url_data.save_url(name)
+            flash('Страница успешно добавлена', 'success')
         return redirect(url_for('show_url', id=id), 302)
-    flash('Некорректный URL')
+    flash('Некорректный URL', 'error')
     return render_template('index.html', name=name), 422
 
 
