@@ -1,0 +1,5 @@
+{% with info_messages = get_flashed_messages(category_filter=['info']) %}
+{% if info_messages %}
+<div class="alert alert-info mb-0 rounded-0 text-center" role="alert">{{ info_messages[0] }}</div>
+{% endif %}
+{% endwith %}
