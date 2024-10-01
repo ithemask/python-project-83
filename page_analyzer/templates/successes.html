@@ -1,4 +1,4 @@
-{% with successes = get_flashed_messages() %}
+{% with successes = get_flashed_messages(category_filter=['success']) %}
 {% if successes %}
 <div class="alert alert-success mb-0 rounded-0 text-center" role="alert">{{ successes[0] }}</div>
 {% endif %}

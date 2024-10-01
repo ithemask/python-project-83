@@ -1,4 +1,4 @@
-{% with errors = get_flashed_messages() %}
+{% with errors = get_flashed_messages(category_filter=['error']) %}
 {% if errors %}
 <div class="alert alert-danger mb-0 rounded-0 text-center" role="alert">{{ errors[0] }}</div>
 {% endif %}
