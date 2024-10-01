@@ -50,6 +50,7 @@ def post_url():
 @app.get('/urls/<id>')
 def show_url(id):
     url = url_data.find_url(id)
+    checks = url_data.get_checks(id)
     if url:
-        return render_template('urls/show.html', url=url)
+        return render_template('urls/show.html', url=url, checks=checks)
     return render_template('not_found.html'), 404
