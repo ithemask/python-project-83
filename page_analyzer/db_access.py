@@ -10,7 +10,7 @@ class UrlData:
     def __get_db_conn(self):
         return psycopg2.connect(self.db_url)
 
-    def __get_url_id(self, name):
+    def get_url_id(self, name):
         sql = 'SELECT id FROM urls WHERE name = %s;'
         conn = self.__get_db_conn()
         with conn:
@@ -54,9 +54,6 @@ class UrlData:
         return entry
 
     def save_url(self, name):
-        id = self.__get_url_id(name)
-        if id:
-            return id
         sql = '''
             INSERT INTO urls (name, created_at)
             VALUES (%s, %s)
