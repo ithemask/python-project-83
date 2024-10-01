@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from page_analyzer.normalizer import normalize
 from page_analyzer.validator import is_valid
 from page_analyzer.db_access import UrlData
+from page_analyzer.check import check
 from flask import (
     Flask,
     render_template,
@@ -54,3 +55,16 @@ def show_url(id):
     if url:
         return render_template('urls/show.html', url=url, checks=checks)
     return render_template('not_found.html'), 404
+
+
+@app.post('/urls/<id>/checks')
+def check_url(id):
+    name = request.args.get('name')
+    check_result = check(name)
+    if check_result:
+        check_result['url_id'] = id
+        url_data.save_check(check_result)
+        flash('Страница успешно проверена', 'success')
+    else:
+        flash('Произошла ошибка при проверке', 'error')
+    return redirect(url_for('show_url', id=id))
