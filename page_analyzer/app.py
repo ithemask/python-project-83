@@ -44,7 +44,7 @@ def post_url():
             id = url_data.save_url(name)
             flash('Страница успешно добавлена', 'success')
         return redirect(url_for('show_url', id=id), 302)
-    flash('Некорректный URL', 'error')
+    flash('Некорректный URL', 'danger')
     return render_template('index.html', name=name), 422
 
 
@@ -66,5 +66,5 @@ def check_url(id):
         url_data.save_check(check_result)
         flash('Страница успешно проверена', 'success')
     else:
-        flash('Произошла ошибка при проверке', 'error')
+        flash('Произошла ошибка при проверке', 'danger')
     return redirect(url_for('show_url', id=id))
