@@ -17,8 +17,8 @@ from flask import (
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = getenv('SECRET_KEY')
-DATABASE_URL = getenv('DATABASE_URL')
-url_data = UrlData(DATABASE_URL)
+app.config['DATABASE_URL'] = getenv('DATABASE_URL')
+url_data = UrlData(app.config['DATABASE_URL'])
 
 
 @app.get('/')
