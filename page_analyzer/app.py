@@ -11,6 +11,7 @@ from flask import (
     redirect,
     url_for,
     flash,
+    abort,
 )
 
 
@@ -54,7 +55,7 @@ def show_url(id):
     checks = url_data.get_checks(id)
     if url:
         return render_template('urls/show.html', url=url, checks=checks)
-    return render_template('not_found.html'), 404
+    abort(404)
 
 
 @app.post('/urls/<id>/checks')
@@ -68,3 +69,13 @@ def check_url(id):
     else:
         flash('Произошла ошибка при проверке', 'danger')
     return redirect(url_for('show_url', id=id))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors.html', error_code=404), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('errors.html', error_code=500), 500
