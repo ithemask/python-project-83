@@ -2,8 +2,14 @@
 
 {% block content %}
 <div class="container-lg mt-3">
+  {% if error_code == 404 %}
   <h1>Страница не найдена</h1>
   <p>Здесь нет того, что вы ищете</p>
+  {% endif %}
+  {% if error_code == 500 %}
+  <h1>Ошибка сервера</h1>
+  <p>Что-то пошло не так...</p>
+  {% endif %}
   <p><a class="link-dark" href="{{ url_for('index') }}">Вернуться на главную</a></p>
 </div>
 {% endblock %}
