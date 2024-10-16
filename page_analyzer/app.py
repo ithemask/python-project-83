@@ -36,17 +36,17 @@ def get_urls():
 @app.post('/urls')
 def post_url():
     name = request.form.get('url')
-    if is_valid(name):
-        name = normalize(name)
-        id = url_data.get_url_id(name)
-        if id:
-            flash('Страница уже существует', 'info')
-        else:
-            id = url_data.save_url(name)
-            flash('Страница успешно добавлена', 'success')
-        return redirect(url_for('show_url', id=id), 302)
-    flash('Некорректный URL', 'danger')
-    return render_template('index.html', name=name), 422
+    if not is_valid(name):
+        flash('Некорректный URL', 'danger')
+        return render_template('index.html', name=name), 422
+    name = normalize(name)
+    id = url_data.get_url_id(name)
+    if id:
+        flash('Страница уже существует', 'info')
+    else:
+        id = url_data.save_url(name)
+        flash('Страница успешно добавлена', 'success')
+    return redirect(url_for('show_url', id=id), 302)
 
 
 @app.get('/urls/<id>')
