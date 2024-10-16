@@ -1,3 +1,4 @@
+import psycopg2
 from os import getenv
 from dotenv import load_dotenv
 from page_analyzer.normalizer import normalize
@@ -19,7 +20,8 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = getenv('SECRET_KEY')
 app.config['DATABASE_URL'] = getenv('DATABASE_URL')
-url_data = UrlData(app.config['DATABASE_URL'])
+db_url = app.config['DATABASE_URL']
+url_data = UrlData()
 
 
 @app.get('/')
@@ -29,7 +31,9 @@ def index():
 
 @app.get('/urls')
 def get_urls():
-    records = url_data.get_main_info()
+    conn = psycopg2.connect(db_url)
+    records = url_data.get_main_info(conn)
+    conn.close()
     return render_template('urls/index.html', records=records)
 
 
@@ -40,21 +44,26 @@ def post_url():
         flash('Некорректный URL', 'danger')
         return render_template('index.html', name=name), 422
     name = normalize(name)
-    id = url_data.get_url_id(name)
+    conn = psycopg2.connect(db_url)
+    id = url_data.get_url_id(conn, name)
     if id:
         flash('Страница уже существует', 'info')
     else:
-        id = url_data.save_url(name)
+        id = url_data.save_url(conn, name)
         flash('Страница успешно добавлена', 'success')
+    conn.close()
     return redirect(url_for('show_url', id=id), 302)
 
 
 @app.get('/urls/<id>')
 def show_url(id):
-    url = url_data.find_url(id)
+    conn = psycopg2.connect(db_url)
+    url = url_data.find_url(conn, id)
     if url:
-        checks = url_data.get_checks(id)
+        checks = url_data.get_checks(conn, id)
+        conn.close()
         return render_template('urls/show.html', url=url, checks=checks)
+    conn.close()
     abort(404)
 
 
@@ -64,7 +73,9 @@ def check_url(id):
     check_result = check(name)
     if check_result:
         check_result['url_id'] = id
-        url_data.save_check(check_result)
+        conn = psycopg2.connect(db_url)
+        url_data.save_check(conn, check_result)
+        conn.close()
         flash('Страница успешно проверена', 'success')
     else:
         flash('Произошла ошибка при проверке', 'danger')
