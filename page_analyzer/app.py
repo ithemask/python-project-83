@@ -29,46 +29,46 @@ def index():
 
 @app.get('/urls')
 def get_urls():
-    records = url_data.get_main_info()
-    return render_template('urls/index.html', records=records)
+    url_info = url_data.get_url_info()
+    return render_template('urls/index.html', url_info=url_info)
 
 
 @app.post('/urls')
 def post_url():
-    name = request.form.get('url')
-    if not is_valid(name):
+    url_name = request.form.get('url')
+    if not is_valid(url_name):
         flash('Некорректный URL', 'danger')
-        return render_template('index.html', name=name), 422
-    name = normalize(name)
-    id = url_data.get_url_id(name)
-    if id:
+        return render_template('index.html', url_name=url_name), 422
+    url_name = normalize(url_name)
+    url_id = url_data.get_url_id(url_name)
+    if url_id:
         flash('Страница уже существует', 'info')
     else:
-        id = url_data.save_url(name)
+        url_id = url_data.save_url(url_name)
         flash('Страница успешно добавлена', 'success')
-    return redirect(url_for('show_url', id=id), 302)
+    return redirect(url_for('show_url', url_id=url_id), 302)
 
 
-@app.get('/urls/<id>')
-def show_url(id):
-    url = url_data.find_url(id)
+@app.get('/urls/<url_id>')
+def show_url(url_id):
+    url = url_data.find_url(url_id)
     if url:
-        checks = url_data.get_checks(id)
+        checks = url_data.get_checks(url_id)
         return render_template('urls/show.html', url=url, checks=checks)
     abort(404)
 
 
-@app.post('/urls/<id>/checks')
-def check_url(id):
-    name = request.args.get('name')
-    check_result = check(name)
+@app.post('/urls/<url_id>/checks')
+def check_url(url_id):
+    url_name = request.args.get('url_name')
+    check_result = check(url_name)
     if check_result:
-        check_result['url_id'] = id
+        check_result['url_id'] = url_id
         url_data.save_check(check_result)
         flash('Страница успешно проверена', 'success')
     else:
         flash('Произошла ошибка при проверке', 'danger')
-    return redirect(url_for('show_url', id=id))
+    return redirect(url_for('show_url', url_id=url_id))
 
 
 @app.errorhandler(404)

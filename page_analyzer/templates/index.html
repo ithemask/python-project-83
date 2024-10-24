@@ -12,7 +12,7 @@
       <p class="lead text-center">Бесплатно проверяйте сайты на SEO-пригодность</p>
       <form action="{{ url_for('post_url') }}" method="post" class="d-flex justify-content-center mt-5 mb-2">
         <label for="url" class="visually-hidden">Url для проверки</label>
-        <input type="text" id="url" name="url" placeholder="https://www.example.com" value="{{ name|default('') }}" class="form-control form-control-lg" required>
+        <input type="text" id="url" name="url" placeholder="https://www.example.com" value="{{ url_name|default('') }}" class="form-control form-control-lg" required>
         <div class="mx-2"></div>
         <input type="submit" class="btn btn-primary btn-lg text-uppercase" value="Проверить">
       </form>

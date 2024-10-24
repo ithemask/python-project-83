@@ -10,19 +10,19 @@ class UrlData:
     def __get_db_conn(self):
         return psycopg2.connect(self.db_url)
 
-    def get_url_id(self, name):
+    def get_url_id(self, url_name):
         sql = 'SELECT id FROM urls WHERE name = %s;'
         conn = self.__get_db_conn()
         with conn:
             with conn.cursor() as cur:
-                cur.execute(sql, (name,))
+                cur.execute(sql, (url_name,))
                 entry = cur.fetchone()
         conn.close()
         if entry:
             return entry[0]
         return None
 
-    def get_main_info(self):
+    def get_url_info(self):
         sql = '''
             SELECT DISTINCT ON (u.created_at)
                 u.id,
@@ -43,17 +43,17 @@ class UrlData:
         conn.close()
         return entries
 
-    def find_url(self, id):
+    def find_url(self, url_id):
         sql = 'SELECT * FROM urls WHERE id = %s;'
         conn = self.__get_db_conn()
         with conn:
             with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
-                cur.execute(sql, (id,))
+                cur.execute(sql, (url_id,))
                 entry = cur.fetchone()
         conn.close()
         return entry
 
-    def save_url(self, name):
+    def save_url(self, url_name):
         sql = '''
             INSERT INTO urls (name, created_at)
             VALUES (%s, %s)
@@ -62,12 +62,12 @@ class UrlData:
         conn = self.__get_db_conn()
         with conn:
             with conn.cursor() as cur:
-                cur.execute(sql, (name, datetime.now()))
-                id = cur.fetchone()[0]
+                cur.execute(sql, (url_name, datetime.now()))
+                url_id = cur.fetchone()[0]
         conn.close()
-        return id
+        return url_id
 
-    def get_checks(self, id):
+    def get_checks(self, url_id):
         sql = '''
             SELECT * FROM url_checks
             WHERE url_id = %s
@@ -76,7 +76,7 @@ class UrlData:
         conn = self.__get_db_conn()
         with conn:
             with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
-                cur.execute(sql, (id,))
+                cur.execute(sql, (url_id,))
                 entries = cur.fetchall()
         conn.close()
         return entries

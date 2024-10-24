@@ -26,7 +26,7 @@
     </table>
   </div>
   <h2 class="mt-5 mb-3">Проверки</h2>
-  <form action="{{ url_for('check_url', id=url.id, name=url.name) }}" method="post">
+  <form action="{{ url_for('check_url', url_id=url.id, url_name=url.name) }}" method="post">
     <input type="submit" class="btn btn-primary" value="Запустить проверку">
   </form>
   <div class="table-responsive">

@@ -13,12 +13,12 @@
           <th>Код ответа</th>
         </tr>
       </thead>
-      {% if records %}
+      {% if url_info %}
       <tbody>
-        {% for record in records %}
+        {% for record in url_info %}
         <tr>
           <td>{{ record.id }}</td>
-          <td><a href="{{ url_for('show_url', id=record.id) }}">{{ record.name }}</a></td>
+          <td><a href="{{ url_for('show_url', url_id=record.id) }}">{{ record.name }}</a></td>
           <td>{{ record.created_at|default('', true) }}</td>
           <td>{{ record.status_code|default('', true) }}</td>
         </tr>
