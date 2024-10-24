@@ -24,7 +24,7 @@ url_data = UrlData(app.config['DATABASE_URL'])
 
 @app.get('/')
 def index():
-    return render_template('index.html', name='')
+    return render_template('index.html')
 
 
 @app.get('/urls')
