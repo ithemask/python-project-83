@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container-lg mt-3">
+  <h1>Ошибка сервера</h1>
+  <p>Что-то пошло не так...</p>
+  <p><a class="link-dark" href="{{ url_for('index') }}">Вернуться на главную</a></p>
+</div>
+{% endblock %}
