@@ -52,8 +52,8 @@ def post_url():
 @app.get('/urls/<id>')
 def show_url(id):
     url = url_data.find_url(id)
-    checks = url_data.get_checks(id)
     if url:
+        checks = url_data.get_checks(id)
         return render_template('urls/show.html', url=url, checks=checks)
     abort(404)
 
