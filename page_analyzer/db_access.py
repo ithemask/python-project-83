@@ -86,4 +86,3 @@ def save_check(conn, check_result):
     check_result['created_at'] = datetime.now()
     with conn.cursor() as cur:
         cur.execute(sql, check_result)
-        return
