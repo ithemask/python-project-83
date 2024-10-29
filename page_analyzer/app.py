@@ -41,7 +41,7 @@ def post_url():
     url_name = request.form.get('url')
     error = validate(url_name)
     if error:
-        flash(error, 'danger')
+        flash(f'Некорректный URL. {error}', 'danger')
         response = render_template('index.html', url_name=url_name), 422
     else:
         conn = db_access.get_db_conn(app.config['DATABASE_URL'])
