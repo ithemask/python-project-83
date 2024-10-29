@@ -38,14 +38,14 @@ def get_urls():
 
 @app.post('/urls')
 def post_url():
-    conn = db_access.get_db_conn(app.config['DATABASE_URL'])
-    with conn:
-        url_name = request.form.get('url')
-        error = validate(url_name)
-        if error:
-            flash(error, 'danger')
-            response = render_template('index.html', url_name=url_name), 422
-        else:
+    url_name = request.form.get('url')
+    error = validate(url_name)
+    if error:
+        flash(error, 'danger')
+        response = render_template('index.html', url_name=url_name), 422
+    else:
+        conn = db_access.get_db_conn(app.config['DATABASE_URL'])
+        with conn:
             url_name = normalize(url_name)
             url_id = db_access.get_url_id(conn, url_name)
             if url_id:
@@ -54,7 +54,7 @@ def post_url():
                 url_id = db_access.save_url(conn, url_name)
                 flash('Страница успешно добавлена', 'success')
             response = redirect(url_for('show_url', url_id=url_id), 302)
-    conn.close()
+        conn.close()
     return response
 
 
