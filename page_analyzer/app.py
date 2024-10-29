@@ -2,7 +2,7 @@ from os import getenv
 from dotenv import load_dotenv
 from page_analyzer import db_access
 from page_analyzer.normalizer import normalize
-from page_analyzer.validator import is_valid
+from page_analyzer.validator import validate
 from page_analyzer.check import check
 from flask import (
     Flask,
@@ -41,8 +41,9 @@ def post_url():
     conn = db_access.get_db_conn(app.config['DATABASE_URL'])
     with conn:
         url_name = request.form.get('url')
-        if not is_valid(url_name):
-            flash('Некорректный URL', 'danger')
+        error = validate(url_name)
+        if error:
+            flash(error, 'danger')
             response = render_template('index.html', url_name=url_name), 422
         else:
             url_name = normalize(url_name)
